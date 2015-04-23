@@ -1,0 +1,47 @@
+---
+title: "Project 4"
+author: "J. Hamski"
+date: "April 22, 2015"
+output: html_document
+---
+
+```{r, warning=FALSE, message=FALSE}
+library(rvest)
+library(dplyr)
+```
+
+##Project Fundamentals: Scraping Title, Publication Date, and Author  
+For each of the reference blog entries on the first page, you should pull out the title, date, and author, and store these in an R data frame.
+
+```{r}
+search.results <-html("http://www.r-bloggers.com/search/web%20scraping")
+
+titles <- search.results %>%
+  html_nodes("#leftcontent h2") %>%
+  html_text()
+
+dates <- search.results %>%
+  html_nodes(".date") %>%
+  html_text()
+
+authors <- search.results %>%
+  html_nodes("div.meta > a") %>%
+  html_text()
+ 
+rBloggers <- as.data.frame(cbind(titles, dates, authors))
+```
+
+##Next Step: Scraping All 17 Result Pages  
+
+```{r}
+
+```
+
+##Final Step: Basic Word-Use Analysis  
+
+```{r}
+
+```
+
+
+
