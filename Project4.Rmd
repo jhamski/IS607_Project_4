@@ -35,11 +35,63 @@ rBloggers <- as.data.frame(cbind(titles, dates, authors))
 
 ```{r}
 
+scrape.results <-function(URL){
+  
+  search.results <- html(URL)
+  
+  titles <- search.results %>%
+  html_nodes("#leftcontent h2") %>%
+  html_text()
+
+dates <- search.results %>%
+  html_nodes(".date") %>%
+  html_text()
+
+authors <- search.results %>%
+  html_nodes("div.meta > a") %>%
+  html_text()
+  
+  rBloggers <- as.data.frame(cbind(titles, dates, authors))
+  
+  Sys.sleep(1)
+  
+  return(rBloggers)
+}
+
+construct.URL <- function(page){
+  url.part <-("http://www.r-bloggers.com/search/web%20scraping/page/") #5/
+  URL <- paste(url.part,page, sep="")
+  return(URL)
+}
+ 
+pages <- 1:17
+
+URLs <- sapply(pages, FUN = construct.URL)
+
+scrape.all <- lapply(URLs, FUN = scrape.results)
+scrape.all <- do.call("rbind", scrape.all)
+
 ```
 
-##Final Step: Basic Word-Use Analysis  
+##Final Step: Wordcloud 
 
 ```{r}
+library(tm)
+library(wordcloud)
+
+words <- Corpus(VectorSource(scrape.all$titles))
+
+wordcloud(words)
+
+#based on: https://georeferenced.wordpress.com/2013/01/15/rwordcloud/
+#not currently working.
+words.proc <- words %>%
+  tm_map(stripWhitespace)%>%
+  tm_map(tolower)%>%
+  tm_map(removeWords, stopwords("english"))%>%
+  tm_map(stemDocument)
+
+wordcloud(words.proc)
 
 ```
 
