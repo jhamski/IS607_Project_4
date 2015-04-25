@@ -29,6 +29,7 @@ authors <- search.results %>%
   html_text()
  
 rBloggers <- as.data.frame(cbind(titles, dates, authors))
+str(rBloggers)
 ```
 
 ##Next Step: Scraping All 17 Result Pages  
@@ -71,11 +72,13 @@ URLs <- sapply(pages, FUN = construct.URL)
 scrape.all <- lapply(URLs, FUN = scrape.results)
 scrape.all <- do.call("rbind", scrape.all)
 
+str(scrape.all)
+
 ```
 
 ##Final Step: Wordcloud 
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(tm)
 library(wordcloud)
 
@@ -83,6 +86,9 @@ words <- Corpus(VectorSource(scrape.all$titles))
 
 wordcloud(words)
 
+
+
+```
 #based on: https://georeferenced.wordpress.com/2013/01/15/rwordcloud/
 #not currently working.
 words.proc <- words %>%
@@ -92,8 +98,5 @@ words.proc <- words %>%
   tm_map(stemDocument)
 
 wordcloud(words.proc)
-
-```
-
 
 
