@@ -84,19 +84,23 @@ library(wordcloud)
 
 words <- Corpus(VectorSource(scrape.all$titles))
 
-wordcloud(words)
+#wordcloud(words)
 
-
-
-```
 #based on: https://georeferenced.wordpress.com/2013/01/15/rwordcloud/
-#not currently working.
+
+library(SnowballC)
+
 words.proc <- words %>%
   tm_map(stripWhitespace)%>%
-  tm_map(tolower)%>%
+  tm_map(content_transformer(tolower))%>%
   tm_map(removeWords, stopwords("english"))%>%
   tm_map(stemDocument)
 
 wordcloud(words.proc)
+```
+
+```{r, warning=FALSE, message=FALSE}
+
+```
 
 
