@@ -5,6 +5,8 @@ date: "April 22, 2015"
 output: html_document
 ---
 
+Published at RPubs: (http://rpubs.com/jhamski/75669)  
+
 ```{r, warning=FALSE, message=FALSE}
 library(rvest)
 library(dplyr)
@@ -41,16 +43,16 @@ scrape.results <-function(URL){
   search.results <- html(URL)
   
   titles <- search.results %>%
-  html_nodes("#leftcontent h2") %>%
-  html_text()
+    html_nodes("#leftcontent h2") %>%
+    html_text()
 
-dates <- search.results %>%
-  html_nodes(".date") %>%
-  html_text()
+  dates <- search.results %>%
+    html_nodes(".date") %>%
+    html_text()
 
-authors <- search.results %>%
-  html_nodes("div.meta > a") %>%
-  html_text()
+  authors <- search.results %>%
+    html_nodes("div.meta > a") %>%
+    html_text()
   
   rBloggers <- as.data.frame(cbind(titles, dates, authors))
   
